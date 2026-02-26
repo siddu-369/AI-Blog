@@ -13,19 +13,19 @@ services:
       - key: FRONTEND_URL
         fromService:
           name: aiblog-frontend
-          type: static_site
+          type: web
           property: url
       - key: PORT
         value: 5000
 
   # Frontend Static Site
-  - type: static
+  - type: web
     name: aiblog-frontend
-    runtime: node
+    runtime: static
     plan: free
     rootDir: frontend
     buildCommand: npm run build
-    publishDir: dist
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
         fromService:
