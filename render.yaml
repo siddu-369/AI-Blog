@@ -19,7 +19,7 @@ services:
         value: 5000
 
   # Frontend Static Site
-  - type: static_site
+  - type: static
     name: aiblog-frontend
     runtime: node
     plan: free
