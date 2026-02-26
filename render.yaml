@@ -14,7 +14,7 @@ services:
         fromService:
           name: aiblog-frontend
           type: web
-          property: url
+          property: host
       - key: PORT
         value: 5000
 
@@ -31,4 +31,4 @@ services:
         fromService:
           name: aiblog-backend
           type: web
-          property: url
+          property: host
