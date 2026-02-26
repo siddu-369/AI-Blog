@@ -22,7 +22,6 @@ services:
   - type: web
     name: aiblog-frontend
     runtime: static
-    plan: free
     rootDir: frontend
     buildCommand: npm run build
     staticPublishPath: dist
