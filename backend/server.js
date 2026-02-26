@@ -186,6 +186,16 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Blog API running' });
 });
 
+app.get('/api/debug-groq', (req, res) => {
+  const key = process.env.GROQ_API_KEY;
+  const isSet = !!key;
+  const startsWithGsk = isSet && typeof key === 'string' && key.startsWith('gsk_');
+  const length = isSet ? key.length : 0;
+  // Also checking if the user accidentally pasted the instruction text
+  const isPlaceholder = isSet && key.includes('Your Groq API Key');
+  res.json({ isSet, startsWithGsk, length, isPlaceholder });
+});
+
 app.listen(PORT, () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
 });
