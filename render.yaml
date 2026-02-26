@@ -1,0 +1,34 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: aiblog-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false # User will set this in Render Dashboard
+      - key: FRONTEND_URL
+        fromService:
+          name: aiblog-frontend
+          type: static_site
+          property: url
+      - key: PORT
+        value: 5000
+
+  # Frontend Static Site
+  - type: static_site
+    name: aiblog-frontend
+    runtime: node
+    plan: free
+    rootDir: frontend
+    buildCommand: npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: aiblog-backend
+          type: web
+          property: url
