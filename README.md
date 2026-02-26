@@ -95,3 +95,70 @@ Render will automatically provision:
 ## Technical Highlights
 * **JSON Mode AI**: The backend forces the Groq LLM to return valid JSON arrays, preventing UI parsing crashes.
 * **CORS Management**: The backend dynamically identifies and allows requests originating from the matched Render frontend domain, dropping standard `localhost` when deployed.
+
+---
+
+## 📸 Screenshots
+
+*(Replace the placeholder links below with actual image paths once you capture them)*
+
+### 1. Blog List Dashboard
+![Blog Dashboard](assets/preview-dashboard.png)
+*The main UI showing a list of all created blog posts.*
+
+### 2. Creating a Blog Post
+![Blog Creation Form](assets/preview-create.png)
+*The fully responsive editor for drafting new content.*
+
+### 3. AI Suggestions in Action
+![AI Suggestions](assets/preview-ai.png)
+*Groq's Llama 3 model providing real-time related topics and SEO tips based on the current draft.*
+
+---
+
+## 🗄️ Database Schema
+
+The application uses `better-sqlite3` for a streamlined, embedded relational database. Upon initialization, it automatically creates a `blogs` table with the following schema:
+
+| Column | Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | `INTEGER` | `PRIMARY KEY AUTOINCREMENT` | Unique identifier for the post. |
+| `title` | `TEXT` | `NOT NULL` | The title of the blog post. |
+| `content` | `TEXT` | `NOT NULL` | The main body of the blog post. |
+| `author` | `TEXT` | `NOT NULL` | The name of the writer. |
+| `created_at` | `DATETIME` | `DEFAULT CURRENT_TIMESTAMP` | Timestamp of post creation. |
+| `updated_at` | `DATETIME` | `DEFAULT CURRENT_TIMESTAMP` | Timestamp of the last update. |
+
+---
+
+## 🤖 AI Integration Explained
+
+The application features an "AI Suggestions" button in the blog editor. When clicked, it triggers the following workflow:
+
+1. **Context Gathering**: The frontend bundles the current `title` and `content` of the draft.
+2. **Backend Submission**: Sends a POST request to `/api/ai-suggestions`.
+3. **Prompt Engineering**: The backend Node.js server constructs a strict prompt telling the Groq LLM to act as a blog assistant and provide exactly 5 suggestions (topics, SEO tips, intros).
+4. **JSON Forcing**: The backend uses the `groq-sdk` with `response_format: { type: 'json_object' }` to guarantee the model uses the specified JSON schema.
+5. **Rendering**: The frontend parses the returned JSON array and displays the actionable tips in the UI sidebar.
+
+---
+
+## 🔌 API Documentation
+
+The backend exposes a RESTful API powered by Express.js. All endpoints are prefixed with `/api`.
+
+### Blogs API
+
+| Method | Endpoint | Description | Expects | Returns |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/blogs` | Retrieve all blog posts. | - | `Array<BlogObject>` |
+| `GET` | `/blogs/:id` | Retrieve a specific post by ID. | `id` in URL | `BlogObject` |
+| `POST` | `/blogs` | Create a new blog post. | `{ title, content, author }` | `{ message, postId }` |
+| `PUT` | `/blogs/:id` | Update an existing post. | `{ title?, content?, author? }` | `{ message }` |
+| `DELETE` | `/blogs/:id` | Delete a specific post. | `id` in URL | `{ message }` |
+
+### AI Core API
+
+| Method | Endpoint | Description | Expects | Returns |
+| :--- | :--- | :--- | :--- | :--- |
+| `POST` | `/ai-suggestions` | Generate contextual writing tips based on draft. | `{ title, content }` | `{ suggestions: Array<string> }` |
