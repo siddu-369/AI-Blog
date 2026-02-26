@@ -2,6 +2,8 @@
 
 A modern, full-stack blog application built with React, Node.js, and SQLite, featuring intelligent integration with Groq's Llama 3 API to provide AI-assisted content suggestions while writing.
 
+**🌍 Live Demo**: [https://aiblog-frontend.onrender.com/](https://aiblog-frontend.onrender.com/)
+
 ## Features
 - **Full-Stack Architecture**: React frontend (`Vite`) and Node.js/Express backend.
 - **Embedded Database**: Lightweight `better-sqlite3` database tailored for fast, local development.
