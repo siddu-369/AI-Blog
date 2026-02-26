@@ -2,10 +2,12 @@ import axios from 'axios'
 
 let baseURL = import.meta.env.VITE_API_URL || '/api';
 
-// Render provides just the service name (e.g., 'aiblog-backend') when using property: host
-// We need to convert it to the public URL format for the frontend to reach it.
-if (baseURL !== '/api' && !baseURL.includes('.onrender.com') && !baseURL.includes('localhost')) {
-  baseURL = `https://${baseURL}.onrender.com/api`;
+// Dynamic routing for Render deployments
+if (typeof window !== 'undefined' && window.location.hostname.endsWith('.onrender.com')) {
+  // If the frontend is hosted at aiblog-frontend.onrender.com,
+  // the backend is expected to be at aiblog-backend.onrender.com
+  const backendHost = window.location.hostname.replace('-frontend', '-backend');
+  baseURL = `https://${backendHost}/api`;
 } else if (baseURL !== '/api' && !baseURL.startsWith('http')) {
   baseURL = `https://${baseURL}`;
 }
