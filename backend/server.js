@@ -13,6 +13,10 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
 }));
+
+if (!process.env.FRONTEND_URL) {
+  console.warn('⚠️ Warning: FRONTEND_URL is not defined. Defaulting to localhost:5173');
+}
 app.use(express.json());
 
 // Database setup
