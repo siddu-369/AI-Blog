@@ -1,7 +1,12 @@
 import axios from 'axios'
 
 let baseURL = import.meta.env.VITE_API_URL || '/api';
-if (baseURL !== '/api' && !baseURL.startsWith('http')) {
+
+// Render provides just the service name (e.g., 'aiblog-backend') when using property: host
+// We need to convert it to the public URL format for the frontend to reach it.
+if (baseURL !== '/api' && !baseURL.includes('.onrender.com') && !baseURL.includes('localhost')) {
+  baseURL = `https://${baseURL}.onrender.com/api`;
+} else if (baseURL !== '/api' && !baseURL.startsWith('http')) {
   baseURL = `https://${baseURL}`;
 }
 

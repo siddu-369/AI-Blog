@@ -10,7 +10,11 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 let frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-if (frontendUrl !== 'http://localhost:5173' && !frontendUrl.startsWith('http')) {
+
+// Render provides just the service name (e.g., 'aiblog-frontend') when using property: host
+if (frontendUrl !== 'http://localhost:5173' && !frontendUrl.includes('.onrender.com') && !frontendUrl.includes('localhost')) {
+  frontendUrl = `https://${frontendUrl}.onrender.com`;
+} else if (frontendUrl !== 'http://localhost:5173' && !frontendUrl.startsWith('http')) {
   frontendUrl = `https://${frontendUrl}`;
 }
 
